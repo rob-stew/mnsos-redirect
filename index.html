@@ -3,35 +3,35 @@
 <head>
     <title>mn.vote</title>
     <script>
-        // Function to log events if specific parameters are present
         function logEventIfParametersExist() {
             const urlParams = new URLSearchParams(window.location.search);
             const m = urlParams.get('m');
             const v = urlParams.get('v');
             const t = urlParams.get('t');
             const who = urlParams.get('who');
-
-            // Log event if any of the parameters are present
+    
+            console.log("URL Parameters:", { m, v, t, who }); // Debug message
+    
             if (m || v || t || who) {
-                // Simple Analytics event logging
                 if (window.sa_event) {
+                    console.log("Logging event to Simple Analytics..."); // Debug message
                     window.sa_event('special-url-params', {
                         m: m,
                         v: v,
                         t: t,
                         who: who
                     });
+                } else {
+                    console.error("Simple Analytics event function not found!"); // Debug message
                 }
             }
         }
-
-        // Call the function to log events
+    
         logEventIfParametersExist();
-
-        // Redirect to the final URL after a short delay
+    
         setTimeout(function() {
             window.location.href = "https://www.sos.mn.gov/elections-voting/";
-        }, 500); // 500ms delay to ensure tracking
+        }, 5500); // 500ms delay to ensure tracking
     </script>
 </head>
 <body>
