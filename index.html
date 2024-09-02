@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>mn.vote</title>
+    <!-- Redirect script with delayed execution -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             function logEventIfParametersExist() {
@@ -26,12 +27,14 @@
                         console.error("Simple Analytics event function not found!"); // Debug message
                     }
                 }
-            }    
-        logEventIfParametersExist();}
-    
-        // setTimeout(function() {
-        //     window.location.href = "https://www.sos.mn.gov/elections-voting/";
-        // }, 5500); // 500ms delay to ensure tracking
+            }
+
+            // Call the function to log events after ensuring the script is loaded
+            setTimeout(function() {
+                logEventIfParametersExist();
+                window.location.href = "https://www.sos.mn.gov/elections-voting/";
+            }, 10000); // 1000ms delay to ensure tracking
+        });
     </script>
 </head>
 <body>
