@@ -4,36 +4,9 @@
     <title>mn.vote</title>
     <!-- Redirect script with delayed execution -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            function logEventIfParametersExist() {
-                const urlParams = new URLSearchParams(window.location.search);
-                const m = urlParams.get('m');
-                const v = urlParams.get('v');
-                const t = urlParams.get('t');
-                const who = urlParams.get('who');
-
-                console.log("URL Parameters:", { m, v, t, who }); // Debug message
-
-                if (m || v || t || who) {
-                    if (window.sa_event) {
-                        console.log("Logging event to Simple Analytics..."); // Debug message
-                        window.sa_event('special-url-params', {
-                            m: m,
-                            v: v,
-                            t: t,
-                            who: who
-                        });
-                    } else {
-                        console.error("Simple Analytics event function not found!"); // Debug message
-                    }
-                }
-            }
-
-            // Call the function to log events after ensuring the script is loaded
-            setTimeout(function() {
-                logEventIfParametersExist();
-                window.location.href = "https://www.sos.mn.gov/elections-voting/";
-            }, 10000); // 1000ms delay to ensure tracking
+        setTimeout(function() {
+            window.location.href = "https://www.sos.mn.gov/elections-voting/";
+        }, 500); // 1000ms delay to ensure tracking
         });
     </script>
 </head>
