@@ -2,15 +2,7 @@
 <html>
 <head>
     <title>mn.vote</title>
-    <!-- Google tag (gtag.js) -->
-<!--     <script async src="https://www.googletagmanager.com/gtag/js?id=G-SYF2WH4DFV"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        
-        gtag('config', 'G-SYF2WH4DFV');
-    </script> -->
+    <!-- Google Analytics tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-SYF2WH4DFV"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
@@ -26,20 +18,20 @@
         const who = urlParams.get('who');
     
         // Send an event to GA4 including custom dimensions for each parameter
-        gtag('event', 'page_view', {
+        gtag('event', 'custom_page_view', {
             'm': m,
             'v': v,
             't': t,
             'who': who
         });
     </script>
-<!-- 
-    <!-- Redirect script with delayed execution -->
-    <script>
-        setTimeout(function() {
-            window.location.href = "https://www.sos.mn.gov/elections-voting/";
-        }, 1000); // Corrected to 500ms delay for tracking
-    </script> -->
+
+    // <!-- Redirect script with delayed execution -->
+    // <script>
+        // setTimeout(function() {
+            // window.location.href = "https://www.sos.mn.gov/elections-voting/";
+        // }, 1000); // 1000ms delay to ensure tracking
+    // </script>
 </head>
 <body>
     <!-- Simple Analytics script for privacy-first analytics -->
