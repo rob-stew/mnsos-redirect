@@ -25,11 +25,6 @@
             't': t,
             'who': who
         });
-
-        // Ensure redirect happens after tracking
-        setTimeout(function() {
-            window.location.href = "https://www.sos.mn.gov/elections-voting/";
-        }, 3000);  // 3-second delay to ensure tracking
     </script>
 </head>
 <body>
@@ -40,6 +35,14 @@
         async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
     <noscript>
         <img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" />
-    </noscript>   
+    </noscript>
+
+    <!-- Independent Redirect Script -->
+    <script>
+        // Delay redirect to give time for tracking scripts to execute
+        setTimeout(function() {
+            window.location.href = "https://www.sos.mn.gov/elections-voting/";
+        }, 3000);  // 3-second delay to ensure analytics data is captured
+    </script>
 </body>
 </html>
