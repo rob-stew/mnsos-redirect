@@ -24,14 +24,12 @@
             'v': v,
             't': t,
             'who': who
-        }, {
-            'transport_type': 'beacon',  // ensures the event is sent immediately
-            'event_callback': function() {
-                setTimeout(function() {
-                    window.location.href = "https://www.sos.mn.gov/elections-voting/";
-                }, 3000);  // 3-second delay to ensure tracking
-            }
         });
+
+        // Ensure redirect happens after tracking
+        setTimeout(function() {
+            window.location.href = "https://www.sos.mn.gov/elections-voting/";
+        }, 3000);  // 3-second delay to ensure tracking
     </script>
 </head>
 <body>
