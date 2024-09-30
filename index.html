@@ -13,10 +13,10 @@
         gtag('config', 'G-SYF2WH4DFV');
 
         const urlParams = new URLSearchParams(window.location.search);
-        const m = parseInt(urlParams.get('m')) || 0;  // Convert 'm' to an integer
-        const v = urlParams.get('v');  // Leave 'v' as a string
-        const t = parseInt(urlParams.get('t')) || 0;  // Convert 't' to an integer
-        const who = urlParams.get('who');  // Leave 'who' as a string
+        const m = urlParams.get('m');
+        const v = urlParams.get('v');
+        const t = urlParams.get('t');
+        const who = urlParams.get('who');
 
         // Send an event to GA4 including custom dimensions for each parameter
         gtag('event', 'custom_page_view', {
@@ -29,13 +29,13 @@
             'event_callback': function() {
                 setTimeout(function() {
                     window.location.href = "https://www.sos.mn.gov/elections-voting/";
-                }, 3000);  // Increased delay to 3 seconds to ensure tracking
+                }, 3000);  // 3-second delay to ensure tracking
             }
         });
     </script>
 </head>
 <body>
-    <!-- Simple Analytics script for privacy-first analytics (moved to body) -->
+    <!-- Simple Analytics script for privacy-first analytics (placed in body) -->
     <script 
         data-allow-params="t,m,v,who"
         data-collect-dnt="false"  <!-- Track all users, including those with Do Not Track enabled -->
