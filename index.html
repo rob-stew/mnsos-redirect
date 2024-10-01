@@ -2,30 +2,6 @@
 <html>
 <head>
     <title>mn.vote</title>
-
-    <!-- Google Analytics tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SYF2WH4DFV"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-
-        gtag('config', 'G-SYF2WH4DFV');
-
-        const urlParams = new URLSearchParams(window.location.search);
-        const m = urlParams.get('m');
-        const v = urlParams.get('v');
-        const t = urlParams.get('t');
-        const who = urlParams.get('who');
-
-        // Send an event to GA4 including custom dimensions for each parameter
-        gtag('event', 'custom_page_view', {
-            'm': m,
-            'v': v,
-            't': t,
-            'who': who
-        });
-    </script>
 </head>
 <body>
     <!-- Simple Analytics script for privacy-first analytics (placed in body) -->
