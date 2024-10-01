@@ -38,11 +38,11 @@
     </noscript>
 
     <!-- Independent Redirect Script -->
+    // Delay redirect to give time for tracking scripts to execute
     <script>
-        // Delay redirect to give time for tracking scripts to execute
         setTimeout(function() {
             window.location.href = "https://www.sos.mn.gov/elections-voting/";
-        }, 3000);  // 3-second delay to ensure analytics data is captured
+        }, 3000);
     </script>
 </body>
 </html>
