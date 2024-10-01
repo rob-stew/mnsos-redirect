@@ -1,10 +1,42 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Test Page</title>
+    <title>mn.vote</title>
+
+    <!-- Google Analytics tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SYF2WH4DFV"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-SYF2WH4DFV');
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const m = urlParams.get('m');
+        const v = urlParams.get('v');
+        const t = urlParams.get('t');
+        const who = urlParams.get('who');
+
+        // Send an event to GA4 including custom dimensions for each parameter
+        gtag('event', 'custom_page_view', {
+            'm': m,
+            'v': v,
+            't': t,
+            'who': who
+        });
+    </script>
 </head>
 <body>
     <h1>Welcome to the Test Page</h1>
     <p>This is a test page for mn.vote.</p>
+    <!-- Simple Analytics script for privacy-first analytics (placed in body) -->
+    <script 
+        data-allow-params="t,m,v,who"
+        data-collect-dnt="false"  <!-- Track all users, including those with Do Not Track enabled -->
+        async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+    <noscript>
+        <img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" />
+    </noscript>
 </body>
 </html>
