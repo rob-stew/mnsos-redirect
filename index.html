@@ -28,17 +28,25 @@
         const tGA = urlParamsGA.get('t');
         const whoGA = urlParamsGA.get('who');
         
-        // Send a custom event to GA4 with the parameters
-        gtag('event', 'custom_page_view', {
-            'm': mGA,
-            'v': vGA,
-            't': tGA,
-            'who': whoGA
-        });
+        // Function to send GA4 event with a promise
+        function sendGA4Event() {
+            return new Promise((resolve) => {
+                gtag('event', 'custom_page_view', {
+                    'm': mGA,
+                    'v': vGA,
+                    't': tGA,
+                    'who': whoGA,
+                    'event_callback': resolve
+                });
+                
+                // Fallback in case the callback doesn't fire
+                setTimeout(resolve, 3000);
+            });
+        }
     </script>
 </head>
 <body>
-    <p>testing.</p>
+    <p>testing2</p>
     
     <!-- Simple Analytics script for privacy-first analytics (placed in body) -->
     <script 
@@ -50,7 +58,7 @@
         <img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" />
     </noscript>
 
-    <!-- Custom Event Tracking Script -->
+    <!-- Custom Event Tracking and Redirect Script -->
     <script>
         (function() {
             // Parse URL parameters
@@ -58,54 +66,66 @@
             const m = urlParams.get('m');
             const t = urlParams.get('t');
 
-            // Function to send events to SimpleAnalytics
-            function sendSimpleAnalyticsEvent(eventName) {
-                if (typeof sa_event === 'function') {
-                    sa_event(eventName);
+            // Arrays of valid m and t values
+            const validM = ['1', '2', '3', '4', '5', '6'];
+            const validT = ['1', '3', '6'];
+
+            // Flags to track event completion
+            let gaTracked = false;
+            let saTracked = false;
+
+            // Function to handle redirect after both events are tracked
+            function checkAndRedirect() {
+                if (gaTracked && saTracked) {
+                    window.location.href = "https://www.sos.mn.gov/elections-voting/";
                 }
             }
 
-            // Array of valid m and t values
-            const validM = ['1', '2', '3', '4', '5', '6', '99'];
-            const validT = ['1', '3', '6', '9'];
+            // Send GA4 event
+            sendGA4Event().then(() => {
+                gaTracked = true;
+                checkAndRedirect();
+            });
 
-            // Track m parameters
-            if (m && validM.includes(m)) {
-                sendSimpleAnalyticsEvent(`mailer${m}_view`);
-            }
+            // Function to send events to SimpleAnalytics with a callback
+            function sendSimpleAnalyticsEvents() {
+                const events = [];
 
-            // Track t parameters
-            if (t && validT.includes(t)) {
-                sendSimpleAnalyticsEvent(`treatment${t}_view`);
-            }
-
-            // Function to handle redirect after events are sent
-            function redirect() {
-                window.location.href = "https://www.sos.mn.gov/elections-voting/";
-            }
-
-            // Function to send events and then redirect
-            function sendEventsAndRedirect() {
-                let eventsSent = false;
-
-                // Send m events
+                // Track m parameters
                 if (m && validM.includes(m)) {
-                    sendSimpleAnalyticsEvent(`mailer${m}_view`);
+                    events.push(`mailer${m}_view`);
                 }
 
-                // Send t events
+                // Track t parameters
                 if (t && validT.includes(t)) {
-                    sendSimpleAnalyticsEvent(`treatment${t}_view`);
+                    events.push(`treatment${t}_view`);
                 }
 
-                // Use a callback to ensure events are sent before redirecting
-                // SimpleAnalytics does not support callbacks directly, so we use a timeout
-                // Adjust the timeout duration if needed
-                setTimeout(redirect, 3000); // 3-second delay
+                if (events.length > 0) {
+                    // Send each event and wait for the last one to trigger redirect
+                    events.forEach((eventName, index) => {
+                        sa_event(eventName, () => {
+                            if (index === events.length - 1) {
+                                saTracked = true;
+                                checkAndRedirect();
+                            }
+                        });
+                    });
+
+                    // Fallback in case callbacks don't fire
+                    setTimeout(() => {
+                        saTracked = true;
+                        checkAndRedirect();
+                    }, 3000);
+                } else {
+                    // No events to send
+                    saTracked = true;
+                    checkAndRedirect();
+                }
             }
 
-            // Initiate event tracking and redirect
-            sendEventsAndRedirect();
+            // Initiate SimpleAnalytics event tracking
+            sendSimpleAnalyticsEvents();
         })();
     </script>
 </body>
