@@ -1,46 +1,132 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>mn.vote</title>
+    
+    <!-- Placeholder for sa_event to queue events before the script loads -->
+    <script>
+        window.sa_event = window.sa_event || function() {
+            var a = [].slice.call(arguments);
+            window.sa_event.q ? window.sa_event.q.push(a) : window.sa_event.q = [a];
+        };
+    </script>
+
     <!-- Google Analytics tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-SYF2WH4DFV"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-    
-        gtag('config', 'G-SYF2WH4DFV');
-    
-        const urlParams = new URLSearchParams(window.location.search);
-        const m = urlParams.get('m');
-        const v = urlParams.get('v');
-        const t = urlParams.get('t');
-        const who = urlParams.get('who');
-    
-        // Send an event to GA4 including custom dimensions for each parameter
-        gtag('event', 'custom_page_view', {
-            'm': m,
-            'v': v,
-            't': t,
-            'who': who
-        });
-    </script>
 
-    <!-- Redirect script with delayed execution -->
-    <script>
-        setTimeout(function() {
-            window.location.href = "https://www.sos.state.mn.us/elections-voting/spanish/inscr%C3%ADbase-para-votar-register-to-vote/";
-        }, 1000); // 1000ms delay to ensure tracking
+        gtag('config', 'G-SYF2WH4DFV');
+
+        // Capture URL parameters for GA4
+        const urlParamsGA = new URLSearchParams(window.location.search);
+        const mGA = urlParamsGA.get('m');
+        const vGA = urlParamsGA.get('v');
+        const tGA = urlParamsGA.get('t');
+        const whoGA = urlParamsGA.get('who');
+        
+        // Function to send GA4 event with a promise
+        function sendGA4Event() {
+            return new Promise((resolve) => {
+                gtag('event', 'custom_page_view', {
+                    'm': mGA,
+                    'v': vGA,
+                    't': tGA,
+                    'who': whoGA,
+                    'event_callback': resolve
+                });
+                
+                // Fallback in case the callback doesn't fire
+                setTimeout(resolve, 3000);
+            });
+        }
     </script>
 </head>
 <body>
-    <!-- Simple Analytics script for privacy-first analytics -->
+    <p></p>
+    
+    <!-- Simple Analytics script for privacy-first analytics (placed in body) -->
     <script 
         data-allow-params="t,m,v,who"
-        data-collect-dnt="true"
-        async defer src="https://scripts.simpleanalyticscdn.com/latest.js"></script>
+        data-collect-dnt="false"
+        async defer src="https://scripts.simpleanalyticscdn.com/latest.js">
+    </script>
     <noscript>
         <img src="https://queue.simpleanalyticscdn.com/noscript.gif" alt="" referrerpolicy="no-referrer-when-downgrade" />
-    </noscript>   
+    </noscript>
+
+    <!-- Custom Event Tracking and Redirect Script -->
+    <script>
+        (function() {
+            // Parse URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const m = urlParams.get('m');
+            const t = urlParams.get('t');
+
+            // Arrays of valid m and t values
+            const validM = ['1', '2', '3', '4', '5', '6'];
+            const validT = ['1', '3', '6'];
+
+            // Flags to track event completion
+            let gaTracked = false;
+            let saTracked = false;
+
+            // Function to handle redirect after both events are tracked
+            function checkAndRedirect() {
+                if (gaTracked && saTracked) {
+                    window.location.href = "https://www.sos.state.mn.us/elections-voting/spanish/inscr%C3%ADbase-para-votar-register-to-vote/";
+                }
+            }
+
+            // Send GA4 event
+            sendGA4Event().then(() => {
+                gaTracked = true;
+                checkAndRedirect();
+            });
+
+            // Function to send events to SimpleAnalytics with a callback
+            function sendSimpleAnalyticsEvents() {
+                const events = [];
+
+                // Track m parameters
+                if (m && validM.includes(m)) {
+                    events.push(`mailer${m}_view`);
+                }
+
+                // Track t parameters
+                if (t && validT.includes(t)) {
+                    events.push(`treatment${t}_view`);
+                }
+
+                if (events.length > 0) {
+                    // Send each event and wait for the last one to trigger redirect
+                    events.forEach((eventName, index) => {
+                        sa_event(eventName, () => {
+                            if (index === events.length - 1) {
+                                saTracked = true;
+                                checkAndRedirect();
+                            }
+                        });
+                    });
+
+                    // Fallback in case callbacks don't fire
+                    setTimeout(() => {
+                        saTracked = true;
+                        checkAndRedirect();
+                    }, 3000);
+                } else {
+                    // No events to send
+                    saTracked = true;
+                    checkAndRedirect();
+                }
+            }
+
+            // Initiate SimpleAnalytics event tracking
+            sendSimpleAnalyticsEvents();
+        })();
+    </script>
 </body>
 </html>
