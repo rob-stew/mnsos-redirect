@@ -40,7 +40,7 @@
                 });
                 
                 // Fallback in case the callback doesn't fire
-                setTimeout(resolve, 3000);
+                setTimeout(resolve, 4000);
             });
         }
     </script>
@@ -65,10 +65,13 @@
             const urlParams = new URLSearchParams(window.location.search);
             const m = urlParams.get('m');
             const t = urlParams.get('t');
+            const who = urlParams.get('who');
+            
 
             // Arrays of valid m and t values
             const validM = ['1', '2', '3', '4', '5', '6'];
             const validT = ['1', '3', '6'];
+            const validWHO = ['test', 'rob'];
 
             // Flags to track event completion
             let gaTracked = false;
@@ -100,6 +103,10 @@
                 if (t && validT.includes(t)) {
                     events.push(`treatment${t}_view`);
                 }
+                
+                if (who && validWHO.includes(who)) {
+                    events.push(`treatment${who}_view`);
+                }
 
                 if (events.length > 0) {
                     // Send each event and wait for the last one to trigger redirect
@@ -116,7 +123,7 @@
                     setTimeout(() => {
                         saTracked = true;
                         checkAndRedirect();
-                    }, 3000);
+                    }, 4000);
                 } else {
                     // No events to send
                     saTracked = true;
